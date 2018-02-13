@@ -9,13 +9,13 @@ import ir.beigirad.backbuttonhandler.bases.ParentBaseFragment
  */
 class Parent2 : ParentBaseFragment() {
     override val getLayout: Int
-        get() = R.layout.frag1_layout
+        get() = R.layout.parent1_layout
     override val container: Int
         get() = R.id.frag1_container
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        openFrag(Child1())
+        openFrag(Child2())
     }
 
 }

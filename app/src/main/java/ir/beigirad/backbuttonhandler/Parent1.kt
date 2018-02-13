@@ -9,7 +9,7 @@ import ir.beigirad.backbuttonhandler.bases.ParentBaseFragment
  */
 class Parent1 : ParentBaseFragment() {
     override val getLayout: Int
-        get() = R.layout.frag1_layout
+        get() = R.layout.parent1_layout
     override val container: Int
         get() = R.id.frag1_container
 

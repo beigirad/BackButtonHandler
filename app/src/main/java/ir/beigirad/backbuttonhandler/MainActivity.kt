@@ -3,8 +3,8 @@ package ir.beigirad.backbuttonhandler
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import ir.beigirad.backbuttonhandler.bases.ParentBaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -16,16 +16,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        supportFragmentManager.beginTransaction().add(R.id.main_container, showingFrag, showingFrag.javaClass.simpleName).commit()
+//        supportFragmentManager.beginTransaction().add(R.id.main_container, showingFragTag, showingFragTag.javaClass.simpleName).commit()
 
-        showFragment(showingFrag)
+        showFragment(showingFragTag)
         btm_nav.setOnNavigationItemSelectedListener(object : BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 when (item.itemId) {
-                    R.id.action_settings1 -> showFragment(Parent1())
+                    R.id.action_settings1 -> showFragment(FragTag.Parent1)
 
-                    R.id.action_settings2 -> showFragment(Parent2())
-                    R.id.action_settings3 -> showFragment(Parent3())
+                    R.id.action_settings2 -> showFragment(FragTag.Parent2)
+
+                    R.id.action_settings3 -> showFragment(FragTag.Parent3)
+
                     else -> {
 
                     }
@@ -35,33 +37,57 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    var showingFrag: ParentBaseFragment = Parent1()
-    fun showFragment(fragment: ParentBaseFragment) {
-        Log.i(TAG, fragment.javaClass.simpleName)
-        if (fragMan.findFragmentByTag(fragment.javaClass.simpleName) == null) {
-            fragMan.beginTransaction().add(R.id.main_container, fragment, fragment.javaClass.simpleName).addToBackStack(fragment.javaClass.simpleName).commit()
-        } else {
-            fragMan.beginTransaction().show(fragMan.findFragmentByTag(fragment.javaClass.simpleName)).commit()
-        }
-
-        if (showingFrag != null && !showingFrag!!.equals(fragment)) {
-            fragMan.beginTransaction().hide(fragMan.findFragmentByTag(showingFrag!!.javaClass.simpleName)).commit()
-        }
-        showingFrag = fragment
-        Log.i(TAG, "showing" + showingFrag!!.javaClass.simpleName)
-
+    enum class FragTag {
+        Parent1,
+        Parent2,
+        Parent3
     }
 
+    var showingFragTag: FragTag = FragTag.Parent1
+    fun showFragment(fragTag: FragTag, fromStack: Boolean = false) {
+
+        if (fragMan.findFragmentByTag(fragTag.name) == null) {
+            var fragment = when (fragTag) {
+                FragTag.Parent1 -> Parent1()
+                FragTag.Parent2 -> Parent2()
+                FragTag.Parent3 -> Parent3()
+            }
+            fragMan.beginTransaction().add(R.id.main_container, fragment, fragTag.name).commit()
+        } else {
+            fragMan.beginTransaction().show(fragMan.findFragmentByTag(fragTag.name)).commit()
+        }
+
+
+        if (showingFragTag != null && !showingFragTag.equals(fragTag)) {
+            fragMan.beginTransaction().hide(fragMan.findFragmentByTag(showingFragTag.name)).commit()
+        }
+        showingFragTag = fragTag
+
+        if (fromStack)
+            btm_nav.menu.findItem(when (showingFragTag) {
+                FragTag.Parent1 -> R.id.action_settings1
+                FragTag.Parent2 -> R.id.action_settings2
+                FragTag.Parent3 -> R.id.action_settings3
+            }).isChecked=true
+
+        Toast.makeText(this, showingFragTag.name, Toast.LENGTH_SHORT).show()
+
+        if (!fromStack)
+            stack.push(showingFragTag.name)
+    }
+
+    var stack = Stack<String>()
+
     override fun onBackPressed() {
-        if (showingFrag.back())
-            if (fragMan.backStackEntryCount > 1)
-                fragMan.popBackStack()
-            else
+        if ((fragMan.findFragmentByTag(showingFragTag.name) as ParentBaseFragment).back())
+            if (stack.count() > 1) {
+                showFragment(FragTag.valueOf(stack.pop()!!), true)
+            } else
                 super.onBackPressed()
     }
 
 
-    //region ww
+//region ww
 //    override fun onUserLeaveHint() {
 //        super.onUserLeaveHint()
 //        Log.i(TAG, "onUserLeaveHint")
@@ -131,5 +157,5 @@ class MainActivity : AppCompatActivity() {
 //        super.onStop()
 //        Log.i(TAG, "onStop")
 //    }
-    //endregion
+//endregion
 }

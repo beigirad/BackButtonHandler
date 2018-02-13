@@ -12,6 +12,7 @@ import android.view.ViewGroup
  * Created by farhad-mbp on 2/13/18.
  */
 abstract class ParentBaseFragment : Fragment() {
+    private val TAG = this.javaClass.simpleName
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(getLayout, container, false)
@@ -25,6 +26,7 @@ abstract class ParentBaseFragment : Fragment() {
     }
 
     fun back(): Boolean {
+        Log.i(TAG, "back " + childFragmentManager.backStackEntryCount)
         if (childFragmentManager.backStackEntryCount > 1) {
             childFragmentManager.popBackStack()
             return false // parent should not handle back
