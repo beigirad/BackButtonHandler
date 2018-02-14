@@ -83,7 +83,8 @@ class MainActivity : AppCompatActivity() {
         if ((fragMan.findFragmentByTag(showingFragTag.name) as ParentBaseFragment).back()) {
             Log.i(TAG, "parent handles back")
             if (stack.count() > 1) {
-                showFragment(FragTag.valueOf(stack.pop()!!), true)
+                stack.pop()
+                showFragment(FragTag.valueOf(stack.peek()!!), true)
             } else
                 super.onBackPressed()
         }
