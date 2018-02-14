@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.child1_layout.*
  * Created by farhad-mbp on 2/13/18.
  */
 class Child1 : ChildBaseFragment() {
-    override val getLayout: Int
+    override val layout: Int
         get() = R.layout.child1_layout
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

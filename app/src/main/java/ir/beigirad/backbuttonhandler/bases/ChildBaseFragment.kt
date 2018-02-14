@@ -10,10 +10,10 @@ import android.view.ViewGroup
  * Created by farhad-mbp on 2/13/18.
  */
 abstract class ChildBaseFragment : Fragment() {
-    abstract val getLayout: Int
+    abstract val layout: Int
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getLayout, container, false)
+        return inflater.inflate(layout, container, false)
     }
 
     fun openFrag(fragment: Fragment) {
