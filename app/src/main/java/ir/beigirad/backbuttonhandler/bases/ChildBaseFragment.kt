@@ -20,9 +20,4 @@ abstract class ChildBaseFragment : Fragment() {
         (parentFragment as ParentBaseFragment).openFrag(fragment)
     }
 
-    fun back(){
-
-    }
-
-
 }

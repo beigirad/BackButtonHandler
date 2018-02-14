@@ -3,6 +3,7 @@ package ir.beigirad.backbuttonhandler
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import ir.beigirad.backbuttonhandler.bases.ParentBaseFragment
@@ -68,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 FragTag.Parent1 -> R.id.action_settings1
                 FragTag.Parent2 -> R.id.action_settings2
                 FragTag.Parent3 -> R.id.action_settings3
-            }).isChecked=true
+            }).isChecked = true
 
         Toast.makeText(this, showingFragTag.name, Toast.LENGTH_SHORT).show()
 
@@ -79,11 +80,13 @@ class MainActivity : AppCompatActivity() {
     var stack = Stack<String>()
 
     override fun onBackPressed() {
-        if ((fragMan.findFragmentByTag(showingFragTag.name) as ParentBaseFragment).back())
+        if ((fragMan.findFragmentByTag(showingFragTag.name) as ParentBaseFragment).back()) {
+            Log.i(TAG, "parent handles back")
             if (stack.count() > 1) {
                 showFragment(FragTag.valueOf(stack.pop()!!), true)
             } else
                 super.onBackPressed()
+        }
     }
 
 
